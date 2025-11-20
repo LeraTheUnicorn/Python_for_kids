@@ -4,11 +4,11 @@ print(fred)
 fred = "\nЧто это: розовое и пушистое? Розовый пушистик!"
 print(fred)
 
-fred = '''\nЧто едят на полдник динозавры ? 
+fred = '''\nЧто едят на полдник динозавры ?
 ТиРекс-кекс'''
 print(fred)
 
-single_quote_str =  '\n"Тут что-то не так, не будь я д\'Артаньян", — подумал он.'
+single_quote_str = '\n"Тут что-то не так, не будь я д\'Артаньян", — подумал он.'
 print(single_quote_str)
 
 double_quote_str = "\n\"Тут что-то не так, не будь я д'Артаньян\", — подумал он."
@@ -52,7 +52,13 @@ wizard_list = 'Паучьи лапки, жабий палец, глаз трит
 print(f'\nwizard_list: {wizard_list}')
 
 
-wizard_list = ['паучьи лапки', 'жабий палец', 'глаз тритона','крыло летучей мыши', 'жир слизня', 'перхоть змеи']
+wizard_list = [
+    'паучьи лапки',
+    'жабий палец',
+    'глаз тритона',
+    'крыло летучей мыши',
+    'жир слизня',
+    'перхоть змеи']
 print(f'\nwizard_list : {wizard_list}')
 
 
@@ -112,11 +118,11 @@ print(fibs[3])
 
 print('\nDICTIONARY:')
 favorite_sports = {'Ральф Уильямс': 'Футбол',
-'Майкл Типпетт': 'Баскетбол',
-'Эдвард Элгар': 'Бейсбол',
-'Ребекка Кларк': 'Нетбол',
-'Этель Смит': 'Бадминтон',
-'Фрэнк Бридж': 'Регби'}
+                   'Майкл Типпетт': 'Баскетбол',
+                   'Эдвард Элгар': 'Бейсбол',
+                   'Ребекка Кларк': 'Нетбол',
+                   'Этель Смит': 'Бадминтон',
+                   'Фрэнк Бридж': 'Регби'}
 print(favorite_sports)
 print('\nРебекка Кларк ?')
 print(favorite_sports['Ребекка Кларк'])
@@ -131,20 +137,24 @@ print(favorite_sports)
 print('\nHOMEWORK PERT 3:')
 
 print('\nTASK#1: Любимые вещи')
-games=['Hide and Seek']
-foods=['сыр','каша']
-print(favorites:=games+foods)
+games = ['Hide and Seek']
+foods = ['сыр', 'каша']
+print(favorites := games + foods)
 
 print('\nTASK#2: Подсчет воинов')
 house_count = 3
 house_warriors_count = 25
 tunnels_count = 2
 tunnel_warriors_count = 20
-print(f'Total count: {house_count*house_warriors_count + tunnels_count*tunnel_warriors_count}')
+print(
+    f'Total count: {
+        house_count *
+        house_warriors_count +
+        tunnels_count *
+        tunnel_warriors_count}')
 
 print('\nTASK#3: Приветствие')
 name = 'Брандо'
 surname = 'Икетт'
 message = 'Привет, %s %s!'
-print(message % (name,surname))
-
+print(message % (name, surname))
