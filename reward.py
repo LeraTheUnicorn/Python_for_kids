@@ -13,16 +13,17 @@ def get_rubles_word(n):
         return 'рублей'
 
 
+n_display = 18  # общее количество глав
 chapters = [f for f in glob.glob('chapter_*.py') if os.path.getsize(f) > 0]
-n = len(chapters)
+n = len(chapters)  # реальное n для итогового расчета
 
-x = 1
-result = 1
-for t in range(2, n + 1):
-    x *= 2
-    result += x
+results = list((lambda n_display, n: ((t, sum(2 ** i for i in range(t))) for t in range(1, max(n_display, n) + 1)))(n_display, n))
 
-print(f"\nВыдайте награду: {result} {get_rubles_word(result)}")
+# Вывод первых n_display значений
+print(f'{"ch":<4} {"reward":<8}')
+for t, res in results[:n_display]:
+    print(f'{t:<4} {res:<8}')
 
-
-
+# Итоговый результат для n
+result_n = next(res for t, res in results if t == n)
+print(f"\nВыдайте награду: {result_n} {get_rubles_word(result_n)}")
