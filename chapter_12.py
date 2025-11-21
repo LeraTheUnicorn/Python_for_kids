@@ -1,5 +1,9 @@
-#1. Заполните экран треугольниками
+# 1. Заполните экран треугольниками
+import random
+import time
 import tkinter as tk
+from PIL import Image, ImageTk
+from tkinter import Tk, Canvas
 
 window = tk.Tk()
 canvas_width = 600
@@ -18,7 +22,6 @@ for y in range(0, canvas_height, size):
         )
 
 # теперь цветные треугольники
-import random
 
 window = tk.Tk()
 canvas_width = 600
@@ -26,8 +29,10 @@ canvas_height = 800
 canvas = tk.Canvas(window, width=canvas_width, height=canvas_height)
 canvas.pack()
 
+
 def random_color():
     return "#{:06x}".format(random.randint(0, 0xFFFFFF))
+
 
 size = 60
 for y in range(0, canvas_height, size):
@@ -41,10 +46,7 @@ for y in range(0, canvas_height, size):
         )
 
 
-
-#2. Движущийся треугольник
-import time
-from tkinter import *
+# 2. Движущийся треугольник
 
 tk = Tk()
 canvas = Canvas(tk, width=400, height=200)
@@ -75,14 +77,11 @@ for x in range(20):
     tk.update()
     time.sleep(0.05)
 
-#3. Движущаяся фотография
+# 3. Движущаяся фотография
 
 # Укажите путь к вашей фотографии
 filename = "./data/cat.jpg"
 
-from tkinter import Tk, Canvas
-from PIL import Image, ImageTk
-import time
 
 root = Tk()
 canvas = Canvas(root, width=1000, height=800)
@@ -119,5 +118,3 @@ for _ in range(30):
     time.sleep(0.02)
 
 root.mainloop()
-
-

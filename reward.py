@@ -17,7 +17,8 @@ n_display = 18  # общее количество глав
 chapters = [f for f in glob.glob('chapter_*.py') if os.path.getsize(f) > 0]
 n = len(chapters)  # реальное n для итогового расчета
 
-results = list((lambda n_display, n: ((t, sum(2 ** i for i in range(t))) for t in range(1, max(n_display, n) + 1)))(n_display, n))
+results = list((lambda n_display, n: ((t, sum(2 ** i for i in range(t)))
+               for t in range(1, max(n_display, n) + 1)))(n_display, n))
 
 # Вывод первых n_display значений
 print(f'{"ch":<4} {"reward":<8}')

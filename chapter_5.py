@@ -79,14 +79,14 @@ else:
 
 # TASK 2
 twinkies = 50
-if 100 > twinkies :
+if 100 > twinkies:
     print('Слишком мало бисквитиков')
 elif 500 < twinkies:
     print('Слишком слишком много бисквитиков')
 
 # TASK 3
 money = 100
-if money in [100,500]:
+if money in [100, 500]:
     print('Значнеие в диапазоне от 100 до 500')
 elif money in [1000, 5000]:
     print('Значнеие в диапазоне от 1000 до 5000')

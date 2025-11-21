@@ -1,4 +1,5 @@
 # 1. Копирование
+import pickle
 import copy
 
 
@@ -17,7 +18,6 @@ print(car1.wheels)
 
 # 2. Запись и загрузка
 print()
-import pickle
 
 # Ваш список любимых вещей
 favorites = ['Python', 'Selenium', 'GitHub', 'Music', 'Battlefield 6']

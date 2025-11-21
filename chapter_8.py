@@ -1,4 +1,7 @@
-#1. Жирафий танец
+# 1. Жирафий танец
+import turtle
+
+
 class Giraffes:
     def left_foot_forward(self):
         print('левая нога впереди')
@@ -22,11 +25,11 @@ class Giraffes:
         self.right_foot_forward()
         self.right_foot_back()
 
+
 reginald = Giraffes()
 reginald.dance()
 
-#2. Черепашьи вилы
-import turtle
+# 2. Черепашьи вилы
 
 # Верхняя стрелка
 arrow_1 = turtle.Pen()
@@ -61,5 +64,3 @@ arrow_4.left(90)
 arrow_4.forward(100)
 
 turtle.done()
-
-
