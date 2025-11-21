@@ -18,18 +18,18 @@ else:
             print(x)
 
 # 2. Четные числа ВАРИАНТ 2
-print('')
+print()
 age = 8
 [print(num) for num in ((x for x in range(1, age + 1) if x % 2 == 0) if age % 2 == 0 else (x for x in range(1, age + 2) if x % 2 != 0))]
 
 
 #3. Пять любимых ингредиентов
-print('')
+print()
 ingredients = ['слизни', 'пиявки', 'катышки из пупка гориллы', 'брови гусеницы', 'пальцы многоножки']
 [print(f"{i+1}. {ingredient}") for i, ingredient in enumerate(ingredients)]
 
 #4. Ваш лунный вес
-print('')
+print()
 earth_weight = float(input("Введите свой вес на Земле (кг): "))
 moon_factor = 0.165
 
