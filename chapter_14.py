@@ -1,6 +1,8 @@
 from tkinter import *
 import random
 
+score = 0
+
 
 class Ball:
 
@@ -9,10 +11,10 @@ class Ball:
         self.paddle = paddle
         self.id = canvas.create_oval(10, 10, 25, 25, fill=color)
         self.canvas.move(self.id, 245, 100)
-        starts = [-3, -2, -1, 1, 2, 3]
+        starts = [-2, -1, 1, 2]
         random.shuffle(starts)
         self.x = starts[0]
-        self.y = -3
+        self.y = -2
         self.canvas_height = self.canvas.winfo_height()
         self.canvas_width = self.canvas.winfo_width()
         self.hit_bottom = False
@@ -31,6 +33,8 @@ class Ball:
             self.y = 3
         if self.hit_paddle(pos) and self.y > 0:
             self.y = -self.y
+            global score
+            score += 1
         if pos[3] >= self.canvas_height:
             self.hit_bottom = True
             self.y = -3
@@ -49,6 +53,8 @@ class Paddle:
         self.canvas_width = self.canvas.winfo_width()
         self.canvas.bind_all('<KeyPress-Left>', self.turn_left)
         self.canvas.bind_all('<KeyPress-Right>', self.turn_right)
+        self.canvas.bind_all('<KeyRelease-Left>', self.stop_left)
+        self.canvas.bind_all('<KeyRelease-Right>', self.stop_right)
 
     def draw(self):
         self.canvas.move(self.id, self.x, 0)
@@ -64,6 +70,14 @@ class Paddle:
     def turn_right(self, evt):
         self.x = 3
 
+    def stop_left(self, evt):
+        if self.x < 0:
+            self.x = 0
+
+    def stop_right(self, evt):
+        if self.x > 0:
+            self.x = 0
+
 
 tk = Tk()
 tk.title("Игра")
@@ -73,6 +87,8 @@ canvas = Canvas(tk, width=500, height=400, bd=0, highlightthickness=0)
 canvas.pack()
 tk.update()
 
+score_text = canvas.create_text(450, 20, text="Счет: 0", font=("Arial", 16))
+
 paddle = Paddle(canvas, 'blue')
 ball = Ball(canvas, paddle, 'red')
 
@@ -81,6 +97,7 @@ def game_loop():
     if not ball.hit_bottom:
         ball.draw()
         paddle.draw()
+        canvas.itemconfig(score_text, text=f"Счет: {score}")
         tk.update_idletasks()
         tk.update()
         tk.after(10, game_loop)
