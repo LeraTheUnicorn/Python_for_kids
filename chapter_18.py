@@ -43,7 +43,9 @@ class Game:
         if self.running:
             for sprite in self.sprites:
                 sprite.move()
-            self.tk.after(10, self.game_loop)
+        if self.sprites and hasattr(self.sprites[-1], 'animate_win'):
+            self.sprites[-1].animate_win()
+        self.tk.after(10, self.game_loop)
 
 
 class Coords:
@@ -200,6 +202,7 @@ class StickFigureSprite(Sprite):
         self.on_ground = False
         self.won = False
         self.facing = 'left'
+        self.win_letters = []
         game.tk.bind_all('<KeyPress-Left>', self.turn_left)
         game.tk.bind_all('<KeyPress-Right>', self.turn_right)
         game.tk.bind_all('<KeyRelease-Left>', self.stop_left)
@@ -245,6 +248,32 @@ class StickFigureSprite(Sprite):
         """
         if self.on_ground:
             self.y = -7
+
+    def animate_win(self):
+        """
+        Анимирует фонтан букв при победе с гравитацией и отскоками от платформ.
+        Параметры: нет.
+        """
+        gravity = 0.5
+        bounce = 0.8
+        for letter in self.win_letters:
+            letter['x'] += letter['vx']
+            letter['vy'] += gravity
+            letter['y'] += letter['vy']
+            # Проверка столкновений с платформами
+            for sprite in self.game.sprites:
+                if hasattr(sprite, 'coordinates') and not sprite.endgame:
+                    if letter['x'] >= sprite.coordinates.x1 and letter['x'] <= sprite.coordinates.x2 and \
+                       letter['y'] >= sprite.coordinates.y1 - 20 and letter['y'] <= sprite.coordinates.y1 and letter['vy'] > 0:
+                        letter['y'] = sprite.coordinates.y1 - 20
+                        letter['vy'] = -letter['vy'] * bounce
+            # Проверка границ земли
+            if letter['y'] >= self.game.canvas_height - 20:
+                letter['y'] = self.game.canvas_height - 20
+                letter['vy'] = -letter['vy'] * bounce
+            self.game.canvas.coords(letter['id'], letter['x'], letter['y'])
+        if self.win_letters and self.win_letters[0]['y'] < self.game.canvas_height + 50:
+            self.game.tk.after(50, self.animate_win)
 
     def animate(self):
         """
@@ -337,18 +366,28 @@ class StickFigureSprite(Sprite):
                 if not self.won:
                     sprite.game.canvas.itemconfig(sprite.image, image=sprite.photo_image2)
                     self.game.canvas.itemconfig(self.image, state='hidden')
-                    self.game.canvas.create_text(250, 250, text="победа", font=("Arial", 50), fill="red")
+                    letters = ["П", "О", "Б", "Е", "Д", "А"]
+                    for i, letter in enumerate(letters):
+                        x = 200 + i * 40
+                        y = 300
+                        text_id = self.game.canvas.create_text(x, y, text=letter, font=("Arial", 30), fill="red")
+                        self.win_letters.append({'id': text_id, 'x': x, 'y': y, 'vx': 0.5 + i * 0.1, 'vy': -3 - i * 0.2})
+                    self.animate_win()
                     self.won = True
-                self.game.running = False
             if right and self.x > 0 and Coords.collided_right(co, sprite_co) and sprite.endgame:
                 self.x = 0
                 right = False
                 if not self.won:
                     sprite.game.canvas.itemconfig(sprite.image, image=sprite.photo_image2)
                     self.game.canvas.itemconfig(self.image, state='hidden')
-                    self.game.canvas.create_text(250, 250, text="победа", font=("Arial", 50), fill="red")
+                    letters = ["П", "О", "Б", "Е", "Д", "А"]
+                    for i, letter in enumerate(letters):
+                        x = 200 + i * 40
+                        y = 300
+                        text_id = self.game.canvas.create_text(x, y, text=letter, font=("Arial", 30), fill="red")
+                        self.win_letters.append({'id': text_id, 'x': x, 'y': y, 'vy': -3 - i * 0.2})
+                    self.animate_win()
                     self.won = True
-                self.game.running = False
             if falling and bottom and self.y == 0 and co.y2 < self.game.canvas_height:
                 self.y = 4
         self.game.canvas.move(self.image, self.x, self.y)
