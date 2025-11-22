@@ -157,15 +157,17 @@ class Sprite:
 
 
 class PlatformSprite(Sprite):
-    def __init__(self, game, photo_image, x, y, width, height):
+    def __init__(self, game, photo_image, x, y):
         """
-        Инициализирует спрайт платформы: создает изображение 1:1 и координаты на основе заданных размеров.
-        Параметры: game - объект Game; photo_image - PhotoImage; x, y - позиция; width, height - размеры для столкновений.
+        Инициализирует спрайт платформы: создает изображение 1:1 и координаты на основе реальных размеров изображения.
+        Параметры: game - объект Game; photo_image - PhotoImage; x, y - позиция.
         """
         Sprite.__init__(self, game)
         self.photo_image = photo_image
         self.image = game.canvas.create_image(x, y, image=self.photo_image, anchor='nw')
-        self.coordinates = Coords(x, y, x + width, y + height)
+        self.width = self.photo_image.width()
+        self.height = self.photo_image.height()
+        self.coordinates = Coords(x, y, x + self.width, y + self.height)
 
 
 class StickFigureSprite(Sprite):
@@ -367,29 +369,31 @@ class StickFigureSprite(Sprite):
 
 
 class DoorSprite(Sprite):
-    def __init__(self, game, photo_image, x, y, width, height):
+    def __init__(self, game, photo_image, x, y):
         """
-        Инициализирует спрайт двери: создает изображение 1:1 и координаты на основе заданных размеров, помечает как конечный объект.
-        Параметры: game - объект Game; photo_image - PhotoImage; x, y - позиция; width, height - размеры для столкновений.
+        Инициализирует спрайт двери: создает изображение 1:1 и координаты на основе реальных размеров, помечает как конечный объект.
+        Параметры: game - объект Game; photo_image - PhotoImage; x, y - позиция.
         """
         Sprite.__init__(self, game)
         self.photo_image = photo_image
         self.photo_image2 = PhotoImage(file="./data/stickman/door2.gif")
         self.image = game.canvas.create_image(x, y, image=self.photo_image, anchor='nw')
-        self.coordinates = Coords(x, y, x + width, y + height)
+        self.width = self.photo_image.width()
+        self.height = self.photo_image.height()
+        self.coordinates = Coords(x, y, x + self.width, y + self.height)
         self.endgame = True
 
 
 g = Game()
-platform1 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 0, 300, 100, 20)
-platform2 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 550, 400, 100, 20)
-platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 50, 650, 100, 20)
-platform4 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 550, 850, 100, 20)
+platform1 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 0, 300)
+# platform2 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 550, 400)
+# platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 50, 650)
+platform4 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 550, 850)
 g.sprites.append(platform1)
-g.sprites.append(platform2)
-g.sprites.append(platform3)
+# g.sprites.append(platform2)
+# g.sprites.append(platform3)
 g.sprites.append(platform4)
-door = DoorSprite(g, PhotoImage(file="./data/stickman/door1.gif"), 45, 50, 200, 200)
+door = DoorSprite(g, PhotoImage(file="./data/stickman/door1.gif"), 45, 50)
 g.sprites.append(door)
 player = StickFigureSprite(g)
 g.sprites.append(player)
