@@ -254,7 +254,7 @@ class StickFigureSprite(Sprite):
         Анимирует фонтан букв при победе с гравитацией и отскоками от платформ.
         Параметры: нет.
         """
-        gravity = 0.5
+        gravity = 0.125
         bounce = 0.8
         for letter in self.win_letters:
             letter['x'] += letter['vx']
@@ -371,7 +371,7 @@ class StickFigureSprite(Sprite):
                         x = 200 + i * 40
                         y = 300
                         text_id = self.game.canvas.create_text(x, y, text=letter, font=("Arial", 30), fill="red")
-                        self.win_letters.append({'id': text_id, 'x': x, 'y': y, 'vx': 0.5 + i * 0.1, 'vy': -3 - i * 0.2})
+                        self.win_letters.append({'id': text_id, 'x': x, 'y': y, 'vx': 0.125 + i * 0.025, 'vy': -3 - i * 0.2})
                     self.animate_win()
                     self.won = True
             if right and self.x > 0 and Coords.collided_right(co, sprite_co) and sprite.endgame:
@@ -385,7 +385,7 @@ class StickFigureSprite(Sprite):
                         x = 200 + i * 40
                         y = 300
                         text_id = self.game.canvas.create_text(x, y, text=letter, font=("Arial", 30), fill="red")
-                        self.win_letters.append({'id': text_id, 'x': x, 'y': y, 'vy': -3 - i * 0.2})
+                        self.win_letters.append({'id': text_id, 'x': x, 'y': y, 'vx': 0.125 + i * 0.025, 'vy': -3 - i * 0.2})
                     self.animate_win()
                     self.won = True
             if falling and bottom and self.y == 0 and co.y2 < self.game.canvas_height:
