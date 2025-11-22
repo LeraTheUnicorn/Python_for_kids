@@ -264,7 +264,8 @@ class StickFigureSprite(Sprite):
             for sprite in self.game.sprites:
                 if hasattr(sprite, 'coordinates') and not sprite.endgame:
                     if letter['x'] >= sprite.coordinates.x1 and letter['x'] <= sprite.coordinates.x2 and \
-                       letter['y'] >= sprite.coordinates.y1 - 20 and letter['y'] <= sprite.coordinates.y1 and letter['vy'] > 0:
+                            letter['y'] >= sprite.coordinates.y1 - 20 and letter['y'] <= sprite.coordinates.y1 and \
+                            letter['vy'] > 0:
                         letter['y'] = sprite.coordinates.y1 - 20
                         letter['vy'] = -letter['vy'] * bounce
             # Проверка границ земли
@@ -357,7 +358,8 @@ class StickFigureSprite(Sprite):
                 bottom = False
                 top = False
                 self.on_ground = True
-            if bottom and falling and self.y == 0 and co.y2 < self.game.canvas_height and Coords.collided_bottom(co, sprite_co):
+            if bottom and falling and self.y == 0 and co.y2 < self.game.canvas_height and Coords.collided_bottom(co,
+                                                                                                                 sprite_co):
                 falling = False
                 self.on_ground = True
             if left and self.x < 0 and Coords.collided_left(co, sprite_co) and sprite.endgame:
@@ -371,7 +373,8 @@ class StickFigureSprite(Sprite):
                         x = 200 + i * 40
                         y = 300
                         text_id = self.game.canvas.create_text(x, y, text=letter, font=("Arial", 30), fill="red")
-                        self.win_letters.append({'id': text_id, 'x': x, 'y': y, 'vx': 0.125 + i * 0.025, 'vy': -3 - i * 0.2})
+                        self.win_letters.append(
+                            {'id': text_id, 'x': x, 'y': y, 'vx': 0.125 + i * 0.025, 'vy': -3 - i * 0.2})
                     self.animate_win()
                     self.won = True
             if right and self.x > 0 and Coords.collided_right(co, sprite_co) and sprite.endgame:
@@ -385,7 +388,8 @@ class StickFigureSprite(Sprite):
                         x = 200 + i * 40
                         y = 300
                         text_id = self.game.canvas.create_text(x, y, text=letter, font=("Arial", 30), fill="red")
-                        self.win_letters.append({'id': text_id, 'x': x, 'y': y, 'vx': 0.125 + i * 0.025, 'vy': -3 - i * 0.2})
+                        self.win_letters.append(
+                            {'id': text_id, 'x': x, 'y': y, 'vx': 0.125 + i * 0.025, 'vy': -3 - i * 0.2})
                     self.animate_win()
                     self.won = True
             if falling and bottom and self.y == 0 and co.y2 < self.game.canvas_height:
