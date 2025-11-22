@@ -4,6 +4,10 @@ import time
 
 class Game:
     def __init__(self):
+        """
+        Инициализирует игру: создает окно Tkinter, холст, загружает фон и подготавливает список спрайтов.
+        Параметры: нет.
+        """
         self.tk = Tk()
         self.tk.title("Человечек спешит к выходу")
         self.tk.resizable(0, 0)
@@ -24,10 +28,18 @@ class Game:
         self.running = True
 
     def mainloop(self):
+        """
+        Запускает главный цикл игры и Tkinter mainloop.
+        Параметры: нет.
+        """
         self.game_loop()
         self.tk.mainloop()
 
     def game_loop(self):
+        """
+        Основной игровой цикл: обновляет спрайты и планирует следующий вызов.
+        Параметры: нет.
+        """
         if self.running:
             for sprite in self.sprites:
                 sprite.move()
@@ -36,6 +48,10 @@ class Game:
 
 class Coords:
     def __init__(self, x1=0, y1=0, x2=0, y2=0):
+        """
+        Инициализирует координаты прямоугольника.
+        Параметры: x1, y1 - верхний левый угол; x2, y2 - нижний правый угол.
+        """
         self.x1 = x1
         self.y1 = y1
         self.x2 = x2
@@ -43,42 +59,72 @@ class Coords:
 
     @staticmethod
     def within_x(co1, co2):
-        if (co1.x1 > co2.x1 and co1.x1 < co2.x2) or (co1.x2 > co2.x1 and co1.x2 < co2.x2) or (
-                co2.x1 > co1.x1 and co2.x1 < co1.x2) or (co2.x2 > co1.x1 and co2.x2 < co1.x2):
+        """
+        Проверяет, пересекаются ли два прямоугольника по оси X.
+        Параметры: co1, co2 - объекты Coords.
+        Возвращает: True если пересекаются, иначе False.
+        """
+        if (co1.x1 >= co2.x1 and co1.x1 <= co2.x2) or (co1.x2 >= co2.x1 and co1.x2 <= co2.x2) or (
+                co2.x1 >= co1.x1 and co2.x1 <= co1.x2) or (co2.x2 >= co1.x1 and co2.x2 <= co1.x2):
             return True
         else:
             return False
 
     @staticmethod
     def within_y(co1, co2):
-        if (co1.y1 > co2.y1 and co1.y1 < co2.y2) \
-                or (co1.y2 > co2.y1 and co1.y2 < co2.y2) \
-                or (co2.y1 > co1.y1 and co2.y1 < co1.y2) \
-                or (co2.y2 > co1.y1 and co2.y2 < co1.y2):
+        """
+        Проверяет, пересекаются ли два прямоугольника по оси Y.
+        Параметры: co1, co2 - объекты Coords.
+        Возвращает: True если пересекаются, иначе False.
+        """
+        if (co1.y1 >= co2.y1 and co1.y1 <= co2.y2) \
+                or (co1.y2 >= co2.y1 and co1.y2 <= co2.y2) \
+                or (co2.y1 >= co1.y1 and co2.y1 <= co1.y2) \
+                or (co2.y2 >= co1.y1 and co2.y2 <= co1.y2):
             return True
         else:
             return False
 
     @staticmethod
     def collided_left(co1, co2):
+        """
+        Проверяет столкновение левой стороны co1 с co2.
+        Параметры: co1, co2 - объекты Coords.
+        Возвращает: True если столкновение, иначе False.
+        """
         if co1.x1 <= co2.x2 and co1.x1 >= co2.x1 and Coords.within_y(co1, co2):
             return True
         return False
 
     @staticmethod
     def collided_right(co1, co2):
+        """
+        Проверяет столкновение правой стороны co1 с co2.
+        Параметры: co1, co2 - объекты Coords.
+        Возвращает: True если столкновение, иначе False.
+        """
         if co1.x2 >= co2.x1 and co1.x2 <= co2.x2 and Coords.within_y(co1, co2):
             return True
         return False
 
     @staticmethod
     def collided_top(co1, co2):
+        """
+        Проверяет столкновение верхней стороны co1 с co2.
+        Параметры: co1, co2 - объекты Coords.
+        Возвращает: True если столкновение, иначе False.
+        """
         if co1.y1 <= co2.y2 and co1.y1 >= co2.y1 and Coords.within_x(co1, co2):
             return True
         return False
 
     @staticmethod
     def collided_bottom(co1, co2):
+        """
+        Проверяет столкновение нижней стороны co1 с co2.
+        Параметры: co1, co2 - объекты Coords.
+        Возвращает: True если столкновение, иначе False.
+        """
         if co1.y2 >= co2.y1 and co1.y2 <= co2.y2 and Coords.within_x(co1, co2):
             return True
         return False
@@ -86,19 +132,36 @@ class Coords:
 
 class Sprite:
     def __init__(self, game):
+        """
+        Базовый класс для спрайтов. Инициализирует общие атрибуты.
+        Параметры: game - объект Game.
+        """
         self.game = game
         self.endgame = False
         self.coordinates = None
 
     def move(self):
+        """
+        Метод движения спрайта. Переопределяется в подклассах.
+        Параметры: нет.
+        """
         pass
 
     def coords(self):
+        """
+        Возвращает координаты спрайта.
+        Параметры: нет.
+        Возвращает: объект Coords.
+        """
         return self.coordinates
 
 
 class PlatformSprite(Sprite):
     def __init__(self, game, photo_image, x, y, width, height):
+        """
+        Инициализирует спрайт платформы: создает изображение 1:1 и координаты на основе заданных размеров.
+        Параметры: game - объект Game; photo_image - PhotoImage; x, y - позиция; width, height - размеры для столкновений.
+        """
         Sprite.__init__(self, game)
         self.photo_image = photo_image
         self.image = game.canvas.create_image(x, y, image=self.photo_image, anchor='nw')
@@ -107,6 +170,10 @@ class PlatformSprite(Sprite):
 
 class StickFigureSprite(Sprite):
     def __init__(self, game):
+        """
+        Инициализирует спрайт человечка: загружает изображения, устанавливает начальную позицию и привязывает клавиши.
+        Параметры: game - объект Game.
+        """
         Sprite.__init__(self, game)
         self.images_left = [
             PhotoImage(file="./data/stickman/man04.gif"),
@@ -120,6 +187,8 @@ class StickFigureSprite(Sprite):
         ]
 
         self.image = game.canvas.create_image(50, 1000, image=self.images_left[0], anchor='nw')
+        self.width = self.images_left[0].width()
+        self.height = self.images_left[0].height()
         self.x = 0
         self.y = 0
         self.current_image = 0
@@ -135,24 +204,48 @@ class StickFigureSprite(Sprite):
         game.tk.bind_all('<space>', self.jump)
 
     def turn_left(self, evt):
+        """
+        Обрабатывает нажатие стрелки влево: устанавливает движение влево.
+        Параметры: evt - событие клавиши.
+        """
         self.x = -5
 
     def turn_right(self, evt):
+        """
+        Обрабатывает нажатие стрелки вправо: устанавливает движение вправо.
+        Параметры: evt - событие клавиши.
+        """
         self.x = 5
 
     def stop_left(self, evt):
+        """
+        Обрабатывает отпускание стрелки влево: останавливает движение влево.
+        Параметры: evt - событие клавиши.
+        """
         if self.x < 0:
             self.x = 0
 
     def stop_right(self, evt):
+        """
+        Обрабатывает отпускание стрелки вправо: останавливает движение вправо.
+        Параметры: evt - событие клавиши.
+        """
         if self.x > 0:
             self.x = 0
 
     def jump(self, evt):
+        """
+        Обрабатывает нажатие пробела: выполняет прыжок, если на земле.
+        Параметры: evt - событие клавиши.
+        """
         if self.on_ground:
             self.y = -7
 
     def animate(self):
+        """
+        Анимирует спрайт: меняет изображения в зависимости от направления движения.
+        Параметры: нет.
+        """
         if self.x != 0 and self.y == 0:
             if time.time() - self.last_time > 0.1:
                 self.last_time = time.time()
@@ -173,16 +266,25 @@ class StickFigureSprite(Sprite):
                 self.game.canvas.itemconfig(self.image, image=self.images_right[self.current_image])
 
     def coords(self):
+        """
+        Обновляет и возвращает текущие координаты спрайта на основе позиции изображения.
+        Параметры: нет.
+        Возвращает: объект Coords.
+        """
         xy = self.game.canvas.coords(self.image)
         if self.coordinates is None:
             self.coordinates = Coords()
         self.coordinates.x1 = xy[0]
         self.coordinates.y1 = xy[1]
-        self.coordinates.x2 = xy[0] + 27
-        self.coordinates.y2 = xy[1] + 30
+        self.coordinates.x2 = xy[0] + self.width
+        self.coordinates.y2 = xy[1] + self.height
         return self.coordinates
 
     def move(self):
+        """
+        Обрабатывает движение спрайта: анимацию, столкновения, гравитацию и границы.
+        Параметры: нет.
+        """
         self.animate()
         co = self.coords()
         left = True
@@ -245,45 +347,49 @@ class StickFigureSprite(Sprite):
         # Гравитация
         self.y += 0.08
         xy = self.game.canvas.coords(self.image)
-        if xy[1] >= 770:
+        if xy[1] >= self.game.canvas_height - self.height:
             self.y = 0
             self.on_ground = True
         # Ограничение границ
         if xy[0] < 0:
             self.game.canvas.coords(self.image, 0, xy[1])
             self.x = 0
-        elif xy[0] > self.game.canvas_width - 27:
-            self.game.canvas.coords(self.image, self.game.canvas_width - 27, xy[1])
+        elif xy[0] > self.game.canvas_width - self.width:
+            self.game.canvas.coords(self.image, self.game.canvas_width - self.width, xy[1])
             self.x = 0
         if xy[1] < 0:
             self.game.canvas.coords(self.image, xy[0], 0)
             self.y = 0
-        elif xy[1] > 770:
-            self.game.canvas.coords(self.image, xy[0], 770)
+        elif xy[1] > self.game.canvas_height - self.height:
+            self.game.canvas.coords(self.image, xy[0], self.game.canvas_height - self.height)
             self.y = 0
             self.on_ground = True
 
 
 class DoorSprite(Sprite):
     def __init__(self, game, photo_image, x, y, width, height):
+        """
+        Инициализирует спрайт двери: создает изображение 1:1 и координаты на основе заданных размеров, помечает как конечный объект.
+        Параметры: game - объект Game; photo_image - PhotoImage; x, y - позиция; width, height - размеры для столкновений.
+        """
         Sprite.__init__(self, game)
         self.photo_image = photo_image
         self.photo_image2 = PhotoImage(file="./data/stickman/door2.gif")
         self.image = game.canvas.create_image(x, y, image=self.photo_image, anchor='nw')
-        self.coordinates = Coords(x, y, x + (width / 2), y + height)
+        self.coordinates = Coords(x, y, x + width, y + height)
         self.endgame = True
 
 
 g = Game()
-platform1 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 0, 250, 100, 20)
-platform2 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 550, 400, 100, 20)
-platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 50, 650, 100, 20)
-platform4 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 550, 850, 100, 20)
+platform1 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 0, 300, 100, 20)
+platform2 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 550, 400, 100, 20)
+platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 50, 650, 100, 20)
+platform4 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 550, 850, 100, 20)
 g.sprites.append(platform1)
 g.sprites.append(platform2)
 g.sprites.append(platform3)
 g.sprites.append(platform4)
-door = DoorSprite(g, PhotoImage(file="./data/stickman/door1.gif"), 45, 50, 250, 250)
+door = DoorSprite(g, PhotoImage(file="./data/stickman/door1.gif"), 45, 50, 200, 200)
 g.sprites.append(door)
 player = StickFigureSprite(g)
 g.sprites.append(player)
