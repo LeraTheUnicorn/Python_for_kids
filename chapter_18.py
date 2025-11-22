@@ -7,6 +7,7 @@ class Game:
         self.tk = Tk()
         self.tk.title("Человечек спешит к выходу")
         self.tk.resizable(0, 0)
+        self.tk.geometry("1000x1000")
         self.tk.wm_attributes("-topmost", 1)
         self.canvas = Canvas(self.tk, width=1000, height=1000, highlightthickness=0)
         self.canvas.pack()
@@ -123,7 +124,7 @@ class StickFigureSprite(Sprite):
             PhotoImage(file="./data/stickman/man03.gif")
         ]
 
-        self.image = game.canvas.create_image(200, 970, image=self.images_left[0], anchor='nw')
+        self.image = game.canvas.create_image(0, 900, image=self.images_left[0], anchor='nw')
         self.x = 0
         self.y = 0
         self.current_image = 0
@@ -154,7 +155,7 @@ class StickFigureSprite(Sprite):
 
     def jump(self, evt):
         if self.on_ground:
-            self.y = -3
+            self.y = -7
 
     def animate(self):
         if self.x != 0 and self.y == 0:
@@ -232,7 +233,7 @@ class StickFigureSprite(Sprite):
                     if not self.won:
                         sprite.game.canvas.itemconfig(sprite.image, image=sprite.photo_image2)
                         self.game.canvas.itemconfig(self.image, state='hidden')
-                        self.game.canvas.create_text(500, 500, text="победа", font=("Arial", 50), fill="red")
+                        self.game.canvas.create_text(250, 250, text="победа", font=("Arial", 50), fill="red")
                         self.won = True
                     self.game.running = False
             if right and self.x > 0 and Coords.collided_right(co, sprite_co):
@@ -242,7 +243,7 @@ class StickFigureSprite(Sprite):
                     if not self.won:
                         sprite.game.canvas.itemconfig(sprite.image, image=sprite.photo_image2)
                         self.game.canvas.itemconfig(self.image, state='hidden')
-                        self.game.canvas.create_text(500, 500, text="победа", font=("Arial", 50), fill="red")
+                        self.game.canvas.create_text(250, 250, text="победа", font=("Arial", 50), fill="red")
                         self.won = True
                     self.game.running = False
             if falling and bottom and self.y == 0 and co.y2 < self.game.canvas_height:
@@ -251,7 +252,21 @@ class StickFigureSprite(Sprite):
         # Гравитация
         self.y += 0.08
         xy = self.game.canvas.coords(self.image)
-        if xy[1] >= 970:
+        if xy[1] >= 900:
+            self.y = 0
+            self.on_ground = True
+        # Ограничение границ
+        if xy[0] < 0:
+            self.game.canvas.coords(self.image, 0, xy[1])
+            self.x = 0
+        elif xy[0] > self.game.canvas_width - 27:
+            self.game.canvas.coords(self.image, self.game.canvas_width - 27, xy[1])
+            self.x = 0
+        if xy[1] < 0:
+            self.game.canvas.coords(self.image, xy[0], 0)
+            self.y = 0
+        elif xy[1] > 770:
+            self.game.canvas.coords(self.image, xy[0], 770)
             self.y = 0
             self.on_ground = True
 
@@ -268,9 +283,9 @@ class DoorSprite(Sprite):
 
 g = Game()
 platform1 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 0, 150, 100, 20)
-platform2 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 400, 400, 100, 20)
-platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 0, 600, 100, 20)
-platform4 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 550, 750, 100, 20)
+platform2 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 550, 400, 100, 20)
+platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 50, 650, 100, 10)
+platform4 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 550, 850, 100, 10)
 g.sprites.append(platform1)
 g.sprites.append(platform2)
 g.sprites.append(platform3)
