@@ -61,31 +61,26 @@ class Coords:
 
     @staticmethod
     def collided_left(co1, co2):
-        if Coords.within_y(co1, co2):
-            if co1.x1 <= co2.x2 and co1.x1 >= co2.x1:
-                return True
-            return False
+        if co1.x1 <= co2.x2 and co1.x1 >= co2.x1 and Coords.within_y(co1, co2):
+            return True
+        return False
 
     @staticmethod
     def collided_right(co1, co2):
-        if Coords.within_y(co1, co2):
-            if co1.x2 >= co2.x1 and co1.x2 <= co2.x2:
-                return True
+        if co1.x2 >= co2.x1 and co1.x2 <= co2.x2 and Coords.within_y(co1, co2):
+            return True
         return False
 
     @staticmethod
     def collided_top(co1, co2):
-        if Coords.within_x(co1, co2):
-            if co1.y1 <= co2.y2 and co1.y1 >= co2.y1:
-                return True
+        if co1.y1 <= co2.y2 and co1.y1 >= co2.y1 and Coords.within_x(co1, co2):
+            return True
         return False
 
     @staticmethod
-    def collided_bottom(y, co1, co2):
-        if Coords.within_x(co1, co2):
-            y_calc = co1.y2 + y
-            if y_calc >= co2.y1 and y_calc <= co2.y2:
-                return True
+    def collided_bottom(co1, co2):
+        if co1.y2 >= co2.y1 and co1.y2 <= co2.y2 and Coords.within_x(co1, co2):
+            return True
         return False
 
 
@@ -124,7 +119,7 @@ class StickFigureSprite(Sprite):
             PhotoImage(file="./data/stickman/man03.gif")
         ]
 
-        self.image = game.canvas.create_image(0, 900, image=self.images_left[0], anchor='nw')
+        self.image = game.canvas.create_image(50, 1000, image=self.images_left[0], anchor='nw')
         self.x = 0
         self.y = 0
         self.current_image = 0
@@ -140,10 +135,10 @@ class StickFigureSprite(Sprite):
         game.tk.bind_all('<space>', self.jump)
 
     def turn_left(self, evt):
-        self.x = -2
+        self.x = -5
 
     def turn_right(self, evt):
-        self.x = 2
+        self.x = 5
 
     def stop_left(self, evt):
         if self.x < 0:
@@ -216,14 +211,12 @@ class StickFigureSprite(Sprite):
             if top and self.y < 0 and Coords.collided_top(co, sprite_co):
                 self.y = -self.y
                 top = False
-            if bottom and self.y > 0 and Coords.collided_bottom(self.y, co, sprite_co):
-                self.y = sprite_co.y1 - co.y2
-                if self.y < 0:
-                    self.y = 0
+            if bottom and self.y > 0 and Coords.collided_bottom(co, sprite_co):
+                self.y = 0
                 bottom = False
                 top = False
                 self.on_ground = True
-            if bottom and falling and self.y == 0 and co.y2 < self.game.canvas_height and Coords.collided_bottom(1, co, sprite_co):
+            if bottom and falling and self.y == 0 and co.y2 < self.game.canvas_height and Coords.collided_bottom(co, sprite_co):
                 falling = False
                 self.on_ground = True
             if left and self.x < 0 and Coords.collided_left(co, sprite_co):
@@ -252,7 +245,7 @@ class StickFigureSprite(Sprite):
         # Гравитация
         self.y += 0.08
         xy = self.game.canvas.coords(self.image)
-        if xy[1] >= 900:
+        if xy[1] >= 770:
             self.y = 0
             self.on_ground = True
         # Ограничение границ
@@ -282,15 +275,15 @@ class DoorSprite(Sprite):
 
 
 g = Game()
-platform1 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 0, 150, 100, 20)
+platform1 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 0, 250, 100, 20)
 platform2 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 550, 400, 100, 20)
-platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 50, 650, 100, 10)
-platform4 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 550, 850, 100, 10)
+platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 50, 650, 100, 20)
+platform4 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 550, 850, 100, 20)
 g.sprites.append(platform1)
 g.sprites.append(platform2)
 g.sprites.append(platform3)
 g.sprites.append(platform4)
-door = DoorSprite(g, PhotoImage(file="./data/stickman/door1.gif"), 45, 30, 40, 35)
+door = DoorSprite(g, PhotoImage(file="./data/stickman/door1.gif"), 45, 50, 250, 250)
 g.sprites.append(door)
 player = StickFigureSprite(g)
 g.sprites.append(player)
