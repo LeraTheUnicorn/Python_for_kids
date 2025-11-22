@@ -199,6 +199,7 @@ class StickFigureSprite(Sprite):
         self.coordinates = Coords()
         self.on_ground = False
         self.won = False
+        self.facing = 'left'
         game.tk.bind_all('<KeyPress-Left>', self.turn_left)
         game.tk.bind_all('<KeyPress-Right>', self.turn_right)
         game.tk.bind_all('<KeyRelease-Left>', self.stop_left)
@@ -211,6 +212,7 @@ class StickFigureSprite(Sprite):
         Параметры: evt - событие клавиши.
         """
         self.x = -5
+        self.facing = 'left'
 
     def turn_right(self, evt):
         """
@@ -218,6 +220,7 @@ class StickFigureSprite(Sprite):
         Параметры: evt - событие клавиши.
         """
         self.x = 5
+        self.facing = 'right'
 
     def stop_left(self, evt):
         """
@@ -266,6 +269,11 @@ class StickFigureSprite(Sprite):
                 self.game.canvas.itemconfig(self.image, image=self.images_right[2])
             else:
                 self.game.canvas.itemconfig(self.image, image=self.images_right[self.current_image])
+        elif self.x == 0 and self.y == 0:
+            if self.facing == 'left':
+                self.game.canvas.itemconfig(self.image, image=self.images_left[0])
+            else:
+                self.game.canvas.itemconfig(self.image, image=self.images_right[0])
 
     def coords(self):
         """
@@ -323,26 +331,24 @@ class StickFigureSprite(Sprite):
             if bottom and falling and self.y == 0 and co.y2 < self.game.canvas_height and Coords.collided_bottom(co, sprite_co):
                 falling = False
                 self.on_ground = True
-            if left and self.x < 0 and Coords.collided_left(co, sprite_co):
+            if left and self.x < 0 and Coords.collided_left(co, sprite_co) and sprite.endgame:
                 self.x = 0
                 left = False
-                if sprite.endgame:
-                    if not self.won:
-                        sprite.game.canvas.itemconfig(sprite.image, image=sprite.photo_image2)
-                        self.game.canvas.itemconfig(self.image, state='hidden')
-                        self.game.canvas.create_text(250, 250, text="победа", font=("Arial", 50), fill="red")
-                        self.won = True
-                    self.game.running = False
-            if right and self.x > 0 and Coords.collided_right(co, sprite_co):
+                if not self.won:
+                    sprite.game.canvas.itemconfig(sprite.image, image=sprite.photo_image2)
+                    self.game.canvas.itemconfig(self.image, state='hidden')
+                    self.game.canvas.create_text(250, 250, text="победа", font=("Arial", 50), fill="red")
+                    self.won = True
+                self.game.running = False
+            if right and self.x > 0 and Coords.collided_right(co, sprite_co) and sprite.endgame:
                 self.x = 0
                 right = False
-                if sprite.endgame:
-                    if not self.won:
-                        sprite.game.canvas.itemconfig(sprite.image, image=sprite.photo_image2)
-                        self.game.canvas.itemconfig(self.image, state='hidden')
-                        self.game.canvas.create_text(250, 250, text="победа", font=("Arial", 50), fill="red")
-                        self.won = True
-                    self.game.running = False
+                if not self.won:
+                    sprite.game.canvas.itemconfig(sprite.image, image=sprite.photo_image2)
+                    self.game.canvas.itemconfig(self.image, state='hidden')
+                    self.game.canvas.create_text(250, 250, text="победа", font=("Arial", 50), fill="red")
+                    self.won = True
+                self.game.running = False
             if falling and bottom and self.y == 0 and co.y2 < self.game.canvas_height:
                 self.y = 4
         self.game.canvas.move(self.image, self.x, self.y)
@@ -385,15 +391,13 @@ class DoorSprite(Sprite):
 
 
 g = Game()
-platform1 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 0, 300)
-# platform2 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 550, 400)
-# platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 50, 650)
-platform4 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform2.gif"), 550, 850)
+platform1 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 0, 300)
+platform2 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 250, 580)
+platform3 = PlatformSprite(g, PhotoImage(file="./data/stickman/platform1.gif"), 750, 800)
 g.sprites.append(platform1)
-# g.sprites.append(platform2)
-# g.sprites.append(platform3)
-g.sprites.append(platform4)
-door = DoorSprite(g, PhotoImage(file="./data/stickman/door1.gif"), 45, 50)
+g.sprites.append(platform2)
+g.sprites.append(platform3)
+door = DoorSprite(g, PhotoImage(file="./data/stickman/door1.gif"), 45, 85)
 g.sprites.append(door)
 player = StickFigureSprite(g)
 g.sprites.append(player)
